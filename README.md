@@ -146,7 +146,7 @@ Repeat upload, test, and save steps with 1-datanode configuration.
 
 | Metric | 3-Datanode | 1-Datanode | Winner |
 |--------|------------|------------|--------|
-| Average Execution Time | 23.413s | 22.604s | **1-Datanode (3.5% faster)** |
+| Average Execution Time | 20.849s | 21.291s | **3-Datanode (2.09% faster)** |
 
 # Scalability Conclusions
 
@@ -264,6 +264,7 @@ docker exec namenode hdfs dfsadmin -safemode get
 ```
 docker exec namenode hdfs dfsadmin -safemode leave
 ```
+
 ### 8. Final Updates
 - The last update of `hadoop.env` and `docker-compose.yml` are for just a single node, not for 3 nodes.
 ---
