@@ -78,13 +78,11 @@ docker exec namenode hdfs dfs -put /shared-folder/input3.txt /input3/
 #### Run timed tests
 
 ```bash
-echo "Testing input1.txt with 3 datanodes..."
+
 time docker exec namenode hadoop jar /shared-folder/DocumentSimilarity-0.0.1-SNAPSHOT.jar controller.DocumentSimilarityDriver /input1 /output1_3nodes
 
-echo "Testing input2.txt with 3 datanodes..."
 time docker exec namenode hadoop jar /shared-folder/DocumentSimilarity-0.0.1-SNAPSHOT.jar controller.DocumentSimilarityDriver /input2 /output2_3nodes
 
-echo "Testing input3.txt with 3 datanodes..."
 time docker exec namenode hadoop jar /shared-folder/DocumentSimilarity-0.0.1-SNAPSHOT.jar controller.DocumentSimilarityDriver /input3 /output3_3nodes
 ```
 
@@ -105,9 +103,8 @@ docker-compose down
 docker container prune -f
 ```
 
-#### Edit docker-compose.yml
+#### Edit docker-compose.yml, and hadoop.env
 
-Comment out datanode2 and datanode3 sections.
 
 #### Restart
 
@@ -117,7 +114,24 @@ docker-compose up -d
 
 ### Step 5: Test with 1 Datanode
 
-Repeat upload, test, and save steps with 1-datanode configuration.
+#### Run timed tests (1-datanode)
+
+```bash
+
+time docker exec namenode hadoop jar /shared-folder/DocumentSimilarity-0.0.1-SNAPSHOT.jar controller.DocumentSimilarityDriver /input1 /output1_1nodes
+
+time docker exec namenode hadoop jar /shared-folder/DocumentSimilarity-0.0.1-SNAPSHOT.jar controller.DocumentSimilarityDriver /input2 /output2_1nodes
+
+time docker exec namenode hadoop jar /shared-folder/DocumentSimilarity-0.0.1-SNAPSHOT.jar controller.DocumentSimilarityDriver /input3 /output3_1nodes
+```
+#### Save results
+
+```bash
+docker exec namenode hdfs dfs -get /output1_1nodes /shared-folder/
+docker exec namenode hdfs dfs -get /output2_1nodes /shared-folder/
+docker exec namenode hdfs dfs -get /output3_1nodes /shared-folder/
+```
+
 
 
 
@@ -146,7 +160,7 @@ Repeat upload, test, and save steps with 1-datanode configuration.
 
 | Metric | 3-Datanode | 1-Datanode | Winner |
 |--------|------------|------------|--------|
-| Average Execution Time | 23.413s | 22.604s | **1-Datanode (3.5% faster)** |
+| Average Execution Time | 20.849s | 21.291s | **3-Datanode (2.09% faster)** |
 
 # Scalability Conclusions
 
@@ -264,6 +278,7 @@ docker exec namenode hdfs dfsadmin -safemode get
 ```
 docker exec namenode hdfs dfsadmin -safemode leave
 ```
+
 ### 8. Final Updates
 - The last update of `hadoop.env` and `docker-compose.yml` are for just a single node, not for 3 nodes.
 ---
